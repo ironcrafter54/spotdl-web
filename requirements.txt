@@ -4,4 +4,4 @@ websockets
 aiofiles
 spotdl
 pytest
-libsonic
+py-sonic

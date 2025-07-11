@@ -16,10 +16,14 @@ RUN pip install --no-cache-dir spotdl fastapi uvicorn[standard]
 # Set working directory
 WORKDIR /app
 
-# Copy everything
-COPY / /app/
-COPY frontend/ /app/frontend/
+# Copy requirements first for better caching
 COPY requirements.txt /app/
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy everything
+COPY . /app/
 
 RUN mkdir -p /app/downloads
 
@@ -28,5 +32,8 @@ VOLUME ["/app/downloads"]
 # Expose port
 EXPOSE 8000
 
+# Test imports before running
+RUN python test_import.py
+
 # Run the server
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
