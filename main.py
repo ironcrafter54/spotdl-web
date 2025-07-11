@@ -1,10 +1,53 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware
 from spotdl_runner import run_spotdl
 from add_to_playlist import add_to_playlist
+from config import settings
 import asyncio
+import hashlib
+import secrets
+from typing import Dict
 
 app = FastAPI()
+
+# Simple session storage (in production, use Redis or database)
+active_sessions: Dict[str, bool] = {}
+
+def create_session_token() -> str:
+    """Create a secure session token"""
+    return secrets.token_urlsafe(32)
+
+def verify_pin(pin: str) -> bool:
+    """Verify if the provided PIN is correct"""
+    return pin == settings.PIN
+
+def get_session_token(request: Request) -> str:
+    """Get session token from cookies"""
+    token = request.cookies.get("session_token", "")
+    print(f"🍪 Retrieved session token: '{token[:20] if token else 'None'}...'")
+    return token
+
+def is_authenticated(request: Request) -> bool:
+    """Check if the request is authenticated"""
+    session_token = get_session_token(request)
+    print(f"🔍 Checking authentication: token='{session_token[:20] if session_token else 'None'}...'")
+
+    if not session_token:
+        print("❌ No session token found")
+        return False
+
+    if session_token not in active_sessions:
+        print(f"❌ Session token not in active sessions. Available: {list(active_sessions.keys())}")
+        return False
+
+    if not active_sessions[session_token]:
+        print("❌ Session token exists but not authenticated")
+        return False
+
+    print("✅ Session is valid and authenticated")
+    return True
 
 class ConnectionManager:
     def __init__(self):
@@ -58,9 +101,287 @@ class State:
 state = State()
 
 @app.get("/")
-async def get():
+async def get(request: Request):
+    session_token = get_session_token(request)
+    print(f"🌐 Main page access attempt: session_token='{session_token[:20] if session_token else 'None'}...'")
+    print(f"🍪 All cookies: {request.cookies}")
+    print(f"🔑 Active sessions: {list(active_sessions.keys())}")
+
+    if not is_authenticated(request):
+        print("❌ Not authenticated, redirecting to login")
+        return RedirectResponse(url="/login")
+
+    print("✅ Authenticated, serving main page")
     with open("frontend/index.html") as f:
         return HTMLResponse(f.read())
+
+@app.get("/login")
+async def login_page():
+    print("🔑 Login page requested")
+    return HTMLResponse("""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PIN Authentication - spotDL</title>
+        <style>
+            :root {
+                --primary-color: #1db954;
+                --background-color: #121212;
+                --surface-color: #1e1e1e;
+                --text-color: #ffffff;
+                --text-secondary-color: #b3b3b3;
+                --error-color: #ff6b6b;
+            }
+
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                background-color: var(--background-color);
+                color: var(--text-color);
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            .login-container {
+                background-color: var(--surface-color);
+                padding: 2rem;
+                border-radius: 16px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                text-align: center;
+                max-width: 400px;
+                width: 90%;
+            }
+
+            h1 {
+                margin-bottom: 2rem;
+                color: var(--primary-color);
+            }
+
+            .pin-input {
+                width: 100%;
+                padding: 1rem;
+                font-size: 1.2rem;
+                border: 2px solid #333;
+                border-radius: 8px;
+                background-color: #2c2c2c;
+                color: var(--text-color);
+                text-align: center;
+                letter-spacing: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .pin-input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 1rem;
+                font-size: 1.1rem;
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .submit-btn:hover {
+                background-color: #1ed760;
+            }
+
+            .error {
+                color: var(--error-color);
+                margin-top: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .info {
+                color: var(--text-secondary-color);
+                margin-top: 1rem;
+                font-size: 0.9rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>🔒 Enter PIN</h1>
+            <form method="post" action="/login">
+                <input type="password" name="pin" class="pin-input" placeholder="Enter PIN" maxlength="20" required autofocus>
+                <button type="submit" class="submit-btn">Access spotDL</button>
+            </form>
+            <div class="info">
+                Enter your PIN to access the spotDL downloader
+            </div>
+        </div>
+    </body>
+    </html>
+    """)
+
+@app.post("/login")
+async def login(request: Request, pin: str = Form(...)):
+    print(f"🔐 PIN authentication attempt: PIN='{pin}', Expected='{settings.PIN}'")
+    print(f"🌐 Request host: {request.headers.get('host')}")
+    print(f"🌐 Request URL: {request.url}")
+
+    if verify_pin(pin):
+        session_token = create_session_token()
+        active_sessions[session_token] = True
+        print(f"✅ Authentication successful, session token: {session_token[:20]}...")
+        print(f"🔑 Total active sessions: {len(active_sessions)}")
+
+        response = RedirectResponse(url="/", status_code=302)
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            max_age=3600 * 24,  # 24 hours
+            httponly=False,  # Set to False for debugging - can see in browser dev tools
+            secure=False,  # Must be False for HTTP
+            samesite="lax",
+            path="/"  # Ensure cookie is available for all paths
+        )
+        print(f"🍪 Setting cookie: session_token={session_token[:20]}...")
+        return response
+    else:
+        print(f"❌ Authentication failed: Invalid PIN")
+        # Return login page with error
+        return HTMLResponse("""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>PIN Authentication - spotDL</title>
+            <style>
+                :root {
+                    --primary-color: #1db954;
+                    --background-color: #121212;
+                    --surface-color: #1e1e1e;
+                    --text-color: #ffffff;
+                    --text-secondary-color: #b3b3b3;
+                    --error-color: #ff6b6b;
+                }
+
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                    background-color: var(--background-color);
+                    color: var(--text-color);
+                    margin: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    }
+
+                .login-container {
+                    background-color: var(--surface-color);
+                    padding: 2rem;
+                    border-radius: 16px;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                    text-align: center;
+                    max-width: 400px;
+                    width: 90%;
+                }
+
+                h1 {
+                    margin-bottom: 2rem;
+                    color: var(--primary-color);
+                }
+
+                .pin-input {
+                    width: 100%;
+                    padding: 1rem;
+                    font-size: 1.2rem;
+                    border: 2px solid var(--error-color);
+                    border-radius: 8px;
+                    background-color: #2c2c2c;
+                    color: var(--text-color);
+                    text-align: center;
+                    letter-spacing: 0.5rem;
+                    margin-bottom: 1rem;
+                }
+
+                .pin-input:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                }
+
+                .submit-btn {
+                    width: 100%;
+                    padding: 1rem;
+                    font-size: 1.1rem;
+                    background-color: var(--primary-color);
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+
+                .submit-btn:hover {
+                    background-color: #1ed760;
+                }
+
+                .error {
+                    color: var(--error-color);
+                    margin-top: 1rem;
+                    font-size: 0.9rem;
+                }
+
+                .info {
+                    color: var(--text-secondary-color);
+                    margin-top: 1rem;
+                    font-size: 0.9rem;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="login-container">
+                <h1>🔒 Enter PIN</h1>
+                <form method="post" action="/login">
+                    <input type="password" name="pin" class="pin-input" placeholder="Enter PIN" maxlength="20" required autofocus>
+                    <button type="submit" class="submit-btn">Access spotDL</button>
+                </form>
+                <div class="error">
+                    ❌ Invalid PIN. Please try again.
+                </div>
+                <div class="info">
+                    Enter your PIN to access the spotDL downloader
+                </div>
+            </div>
+        </body>
+        </html>
+        """, status_code=401)
+
+@app.get("/debug")
+async def debug_session(request: Request):
+    """Debug endpoint to check session state"""
+    session_token = get_session_token(request)
+    return {
+        "session_token": session_token[:20] + "..." if session_token else None,
+        "has_session": bool(session_token),
+        "is_authenticated": is_authenticated(request),
+        "active_sessions_count": len(active_sessions),
+        "cookies": dict(request.cookies),
+        "headers": dict(request.headers)
+    }
+
+@app.post("/logout")
+async def logout(request: Request):
+    session_token = get_session_token(request)
+    print(f"🚪 Logout attempt with token: {session_token[:20] if session_token else 'None'}...")
+    if session_token in active_sessions:
+        del active_sessions[session_token]
+        print(f"✅ Session removed from active sessions")
+
+    response = RedirectResponse(url="/login", status_code=302)
+    response.delete_cookie("session_token", path="/")
+    return response
 
 async def download_task(url: str):
     try:
@@ -97,6 +418,12 @@ async def download_task(url: str):
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    # Check authentication via query parameter for WebSocket
+    session_token = websocket.query_params.get("session_token", "")
+    if not session_token or session_token not in active_sessions:
+        await websocket.close(code=4001, reason="Authentication required")
+        return
+
     await manager.connect(websocket)
     try:
         # Send current state to the newly connected client

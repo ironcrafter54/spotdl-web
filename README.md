@@ -9,6 +9,7 @@ A web-based interface for [spotDL](https://github.com/spotDL/spotify-downloader)
 - 📱 **Playlist Integration**: Automatically add downloaded songs to Navidrome playlists
 - 🔄 **Duplicate Detection**: Skips already downloaded songs
 - 📝 **Detailed Logging**: Real-time logs of download progress, failures, and successes
+- 🔐 **PIN Authentication**: Secure access with customizable PIN protection
 - 🐳 **Docker Support**: Easy deployment with Docker containerization
 
 ## Prerequisites
@@ -56,7 +57,17 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ### Environment Variables
 
-For Navidrome integration, set these environment variables:
+The application supports the following environment variables:
+
+#### Core Settings
+```bash
+export PIN="your-secret-pin"                    # PIN for accessing the application (default: 1234)
+export SESSION_SECRET="your-session-secret"     # Secret key for session management
+export PORT="8000"                              # Port for the web application
+```
+
+#### Navidrome Integration
+For Navidrome playlist integration, set these environment variables:
 
 ```bash
 export SECRET_KEY="your-navidrome-url"
@@ -69,6 +80,8 @@ export PORT="4533"  # Navidrome port
 
 ```bash
 docker run -p 8000:8000 \
+  -e PIN="your-secret-pin" \
+  -e SESSION_SECRET="your-session-secret" \
   -e SECRET_KEY="http://your-navidrome-url" \
   -e USERNAME="your-username" \
   -e PASSWORD="your-password" \
@@ -77,11 +90,44 @@ docker run -p 8000:8000 \
   spotdl-web
 ```
 
+### PIN Authentication Setup
+
+⚠️ **Important Security Notes:**
+- The default PIN is `1234` - **change this immediately** for security
+- Set a strong, unique session secret for production use
+- Sessions are valid for 24 hours after login
+
+#### Setting Your PIN
+
+**Option 1: Environment Variable**
+```bash
+export PIN="your-secure-pin"
+python run.py
+```
+
+**Option 2: Docker**
+```bash
+docker run -p 8000:8000 -e PIN="your-secure-pin" spotdl-web
+```
+
+**Option 3: Production Deployment**
+```bash
+# Create a .env file
+echo "PIN=your-secure-pin" >> .env
+echo "SESSION_SECRET=your-random-secret-key" >> .env
+```
+
 ## Usage
 
 1. Open your web browser and navigate to `http://localhost:8000`
 
-2. **Basic Download**:
+2. **First Access - PIN Authentication**:
+   - You'll be prompted to enter your PIN
+   - Enter the PIN you configured (default: `1234`)
+   - Click "Access spotDL" to continue
+   - Your session will remain active for 24 hours
+
+3. **Basic Download**:
    - Enter a Spotify URL (playlist, album, or track)
    - Click "Download" to start the process
 
@@ -106,21 +152,25 @@ docker run -p 8000:8000 \
 
 ## API Endpoints
 
-- `GET /` - Web interface
-- `WebSocket /ws` - Real-time communication for downloads and progress updates
+- `GET /` - Web interface (requires authentication)
+- `GET /login` - PIN authentication page
+- `POST /login` - PIN authentication endpoint
+- `POST /logout` - Logout endpoint
+- `WebSocket /ws` - Real-time communication for downloads and progress updates (requires authentication)
 
 ## Project Structure
 
 ```
 spotdl-web/
-├── main.py              # FastAPI application and WebSocket handling
+├── main.py              # FastAPI application, WebSocket handling, and authentication
 ├── spotdl_runner.py     # spotDL command execution and output parsing
 ├── add_to_playlist.py   # Navidrome playlist integration
-├── config.py           # Configuration settings
+├── config.py           # Configuration settings and environment variables
+├── run.py              # Startup script with configuration validation
 ├── requirements.txt    # Python dependencies
 ├── Dockerfile         # Docker configuration
 ├── frontend/
-│   └── index.html     # Web interface
+│   └── index.html     # Web interface with authentication
 └── downloads/         # Downloaded music files
 ```
 
@@ -138,18 +188,35 @@ python test_import.py
 # Install dependencies
 pip install -r requirements.txt
 
+# Set up environment variables
+export PIN="dev-pin"
+export SESSION_SECRET="dev-secret"
+
 # Run in development mode
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# OR use the startup script
+python run.py
 ```
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **spotDL not found**: Ensure spotDL is installed and in your PATH
-2. **FFmpeg not found**: Install FFmpeg for audio processing
-3. **Permission errors**: Check file permissions in the downloads directory
-4. **Navidrome connection failed**: Verify your Navidrome server URL and credentials
+1. **Can't access the application**: Check that you're using the correct PIN
+2. **Session expired**: Re-enter your PIN to get a new 24-hour session
+3. **WebSocket connection failed**: Ensure you're logged in with a valid session
+4. **spotDL not found**: Ensure spotDL is installed and in your PATH
+5. **FFmpeg not found**: Install FFmpeg for audio processing
+6. **Permission errors**: Check file permissions in the downloads directory
+7. **Navidrome connection failed**: Verify your Navidrome server URL and credentials
+
+### Security Best Practices
+
+- Always change the default PIN (`1234`) before deployment
+- Use a strong, random session secret in production
+- Consider using HTTPS in production environments
+- Regularly rotate your PIN and session secret
+- Monitor access logs for suspicious activity
 
 ### Logs
 

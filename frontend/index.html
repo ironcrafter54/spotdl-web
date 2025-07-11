@@ -4,12 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>spotDL Web Downloader</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-            rel="stylesheet"
-        />
+        <!-- Using system fonts instead of Google Fonts for better reliability -->
         <style>
             :root {
                 --primary-color: #1db954;
@@ -22,7 +17,9 @@
             }
 
             body {
-                font-family: "Roboto", sans-serif;
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Oxygen, Ubuntu, Cantarell, sans-serif;
                 background-color: var(--background-color);
                 color: var(--text-color);
                 margin: 0;
@@ -156,7 +153,29 @@
     </head>
     <body>
         <div class="container">
-            <h1>spotDL Downloader</h1>
+            <div
+                style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1rem;
+                "
+            >
+                <h1 style="margin: 0">spotDL Downloader</h1>
+                <button
+                    id="logoutBtn"
+                    style="
+                        background-color: #666;
+                        color: white;
+                        border: none;
+                        padding: 0.5rem 1rem;
+                        border-radius: 0.5rem;
+                        cursor: pointer;
+                    "
+                >
+                    Logout
+                </button>
+            </div>
             <div class="input-group">
                 <input
                     type="text"
@@ -194,6 +213,33 @@
             let socket;
             let reconnectAttempts = 0;
             const maxReconnectAttempts = 5;
+            let sessionToken = null;
+
+            // Get session token from cookies
+            function getSessionToken() {
+                const cookies = document.cookie.split(";");
+                for (let cookie of cookies) {
+                    const [name, value] = cookie.trim().split("=");
+                    if (name === "session_token") {
+                        return value;
+                    }
+                }
+                return null;
+            }
+
+            sessionToken = getSessionToken();
+
+            // Logout functionality
+            document.getElementById("logoutBtn").onclick = async () => {
+                try {
+                    await fetch("/logout", { method: "POST" });
+                    window.location.href = "/login";
+                } catch (error) {
+                    console.error("Logout error:", error);
+                    // Force redirect even if logout fails
+                    window.location.href = "/login";
+                }
+            };
 
             function handleNotificationPermission() {
                 if (Notification.permission === "granted") {
@@ -253,7 +299,9 @@
 
             function connect() {
                 try {
-                    socket = new WebSocket(`ws://${window.location.host}/ws`);
+                    // Include session token in WebSocket connection
+                    const wsUrl = `ws://${window.location.host}/ws?session_token=${sessionToken}`;
+                    socket = new WebSocket(wsUrl);
 
                     socket.onopen = () => {
                         console.log("WebSocket connection established.");
@@ -290,8 +338,18 @@
                         appendLog("Connection error.");
                     };
 
-                    socket.onclose = () => {
-                        console.log("WebSocket connection closed.");
+                    socket.onclose = (event) => {
+                        console.log("WebSocket connection closed.", event);
+
+                        // If closed due to authentication (code 4001), redirect to login
+                        if (event.code === 4001) {
+                            appendLog(
+                                "Authentication required. Redirecting to login...",
+                            );
+                            window.location.href = "/login";
+                            return;
+                        }
+
                         appendLog("Connection lost. Reconnecting...");
 
                         if (reconnectAttempts < maxReconnectAttempts) {
@@ -341,8 +399,13 @@
                 }
             };
 
-            // Initial connection
-            connect();
+            // Check if we have a session token before connecting
+            if (sessionToken) {
+                connect();
+            } else {
+                appendLog("No session token found. Redirecting to login...");
+                window.location.href = "/login";
+            }
         </script>
     </body>
 </html>
