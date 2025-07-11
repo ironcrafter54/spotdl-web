@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+websockets
+aiofiles
+spotdl
+pytest
+libsonic
