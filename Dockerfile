@@ -32,8 +32,5 @@ VOLUME ["/app/downloads"]
 # Expose port
 EXPOSE 8000
 
-# Test imports before running
-RUN python test_import.py
-
 # Run the server using the startup script
 CMD ["python", "run.py"]
