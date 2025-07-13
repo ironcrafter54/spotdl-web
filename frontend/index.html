@@ -4,199 +4,62 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>spotDL Web Downloader</title>
+        <link rel="stylesheet" href="/static/style.css?v=1.5" />
         <!-- Using system fonts instead of Google Fonts for better reliability -->
-        <style>
-            :root {
-                --primary-color: #1db954;
-                --background-color: #121212;
-                --surface-color: #1e1e1e;
-                --text-color: #ffffff;
-                --text-secondary-color: #b3b3b3;
-                --container-padding: 2rem;
-                --container-color: #2c2c2c;
-            }
-
-            body {
-                font-family:
-                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                    Oxygen, Ubuntu, Cantarell, sans-serif;
-                background-color: var(--background-color);
-                color: var(--text-color);
-                margin: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-            }
-
-            .container {
-                width: 90%;
-                max-width: 600px;
-                height: 90vh;
-                background-color: var(--surface-color);
-                border-radius: 16px;
-                padding: var(--container-padding);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-                display: flex;
-                flex-direction: column;
-                margin: 1em;
-            }
-
-            h1 {
-                text-align: center;
-                font-weight: 700;
-                margin-bottom: 2rem;
-            }
-
-            .input-group {
-                display: flex;
-                margin-bottom: 1em;
-            }
-
-            #url {
-                flex-grow: 1;
-                border: none;
-                background-color: #2c2c2c;
-                color: var(--text-color);
-                padding: 1rem;
-                border-radius: 1em;
-                font-size: 1rem;
-                margin-right: 1em;
-            }
-
-            #downloadBtn {
-                border: none;
-                background-color: var(--primary-color);
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 1em;
-                cursor: pointer;
-                font-weight: 500;
-                font-size: 1rem;
-            }
-
-            #playlist_input {
-                border: none;
-                background-color: #2c2c2c;
-                color: var(--text-color);
-                padding: 1rem;
-                font-size: 1rem;
-                border-radius: 1em;
-                height: 1.2em;
-                margin-bottom: 1em;
-            }
-
-            #downloadBtn:disabled {
-                background-color: #666;
-                cursor: not-allowed;
-            }
-
-            #notifyBtn {
-                background-color: transparent;
-                border: 1px solid var(--primary-color);
-                color: var(--primary-color);
-                padding: 0.5rem 1rem;
-                border-radius: 1em;
-                cursor: pointer;
-                margin-bottom: 1em;
-            }
-
-            #progress-container {
-                margin-top: 0rem;
-                margin-bottom: 1em;
-            }
-
-            #progress-text {
-                font-size: 1rem;
-                color: var(--text-color);
-                margin-bottom: 0.5rem;
-                position: absolute;
-                margin: 0.95em;
-            }
-
-            progress {
-                width: 100%;
-                height: 3em;
-                appearance: none;
-                border-radius: 1em;
-                overflow: hidden;
-                transition: all 0.3s ease;
-                border: none;
-                background-color: var(--container-color);
-            }
-
-            progress::-moz-progress-bar {
-                background-color: var(--primary-color);
-                border-radius: 1em;
-            }
-
-            progress::-webkit-progress-value {
-                background-color: var(--primary-color);
-                border-radius: 1em;
-                transition: width 0.3s ease;
-            }
-
-            #terminal {
-                width: 100%;
-                flex-grow: 1;
-                background-color: #2c2c2c;
-                color: #0f0;
-                border-radius: 1em;
-                padding: 1rem;
-                font-family: monospace;
-                font-size: 0.8rem;
-                border: none;
-                box-sizing: border-box;
-                resize: none;
-            }
-        </style>
     </head>
     <body>
-        <div class="container">
-            <div
-                style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 1rem;
-                "
-            >
-                <h1 style="margin: 0">spotDL Downloader</h1>
-                <button
-                    id="logoutBtn"
-                    style="
-                        background-color: #666;
-                        color: white;
-                        border: none;
-                        padding: 0.5rem 1rem;
-                        border-radius: 0.5rem;
-                        cursor: pointer;
-                    "
-                >
-                    Logout
-                </button>
+        <div class="header">
+            <div class="title-card pixel-corners">
+                <a href="spotdl">
+                    <img src="/static/spotify logo.png" alt="" class="spotify">
+                </a>
+                <p class="title">SpotDL - Improved</p>
             </div>
-            <div class="input-group">
-                <input
+            <button id="logoutBtn" class="logout pixel-corners">Logout</button>
+        </div>
+        <div class="content">
+            <div class="inputs pixel-corners">
+                <div id="progress-container" style="display: none">
+                    <div id="progress-text">Progress: 0 / 0</div>
+                    <div class="pixel-borders--wrapper">
+                        <progress id="progress-bar" max="1" value="0"></progress>
+                    </div>
+                </div>
+                <div class="pixel-borders--wrapper" style="margin-bottom: 20px; margin-top: 20px;">
+    
+                    <input
                     type="text"
                     id="url"
                     placeholder="Enter Spotify URL here"
-                />
-                <button id="downloadBtn">Download</button>
+                    class="param-input"
+                    />
+                </div>
+    
+                <div class="pixel-borders--wrapper" style="margin-bottom: 20px;">
+    
+                    <input
+                    id="playlist_input"
+                    type="text"
+                    placeholder="Playlist to add songs to (optional)"
+                    class="param-input"
+                    />
+                </div>
+    
+                <button id="notifyBtn" class="submit-btn pixel-corners" style="margin-top: 0px; margin-bottom: 20px;">Enable Notifications</button>
+    
+                <button id="downloadBtn"  class="submit-btn pixel-corners" style="margin-top: 0px; margin-bottom: 20px;">Download</button>
+                
+    
+    
             </div>
-            <input
-                id="playlist_input"
-                type="text"
-                placeholder="Playlist to add songs to (optional)"
-            />
-            <button id="notifyBtn">Enable Notifications</button>
-
-            <div id="progress-container" style="display: none">
-                <div id="progress-text">Progress: 0 / 0</div>
-                <progress id="progress-bar" max="1" value="0"></progress>
+    
+            <div class="textarea pixel-corners">
+                <div class="terminal-border">
+                    <textarea id="terminal" class="terminal" disabled="true">
+    
+                    </textarea>
+                </div>
             </div>
-
-            <textarea id="terminal" readonly></textarea>
         </div>
 
         <script>

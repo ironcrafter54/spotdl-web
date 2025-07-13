@@ -2,6 +2,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPExcept
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from spotdl_runner import run_spotdl
 from add_to_playlist import add_to_playlist
 from config import settings
@@ -11,6 +12,9 @@ import secrets
 from typing import Dict
 
 app = FastAPI()
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 # Simple session storage (in production, use Redis or database)
 active_sessions: Dict[str, bool] = {}
@@ -118,110 +122,9 @@ async def get(request: Request):
 @app.get("/login")
 async def login_page():
     print("🔑 Login page requested")
-    return HTMLResponse("""
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PIN Authentication - spotDL</title>
-        <style>
-            :root {
-                --primary-color: #1db954;
-                --background-color: #121212;
-                --surface-color: #1e1e1e;
-                --text-color: #ffffff;
-                --text-secondary-color: #b3b3b3;
-                --error-color: #ff6b6b;
-            }
+    with open("frontend/login.html") as f:
+        return HTMLResponse(f.read())
 
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                background-color: var(--background-color);
-                color: var(--text-color);
-                margin: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-            }
-
-            .login-container {
-                background-color: var(--surface-color);
-                padding: 2rem;
-                border-radius: 16px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-                text-align: center;
-                max-width: 400px;
-                width: 90%;
-            }
-
-            h1 {
-                margin-bottom: 2rem;
-                color: var(--primary-color);
-            }
-
-            .pin-input {
-                width: 100%;
-                padding: 1rem;
-                font-size: 1.2rem;
-                border: 2px solid #333;
-                border-radius: 8px;
-                background-color: #2c2c2c;
-                color: var(--text-color);
-                text-align: center;
-                letter-spacing: 0.5rem;
-                margin-bottom: 1rem;
-            }
-
-            .pin-input:focus {
-                outline: none;
-                border-color: var(--primary-color);
-            }
-
-            .submit-btn {
-                width: 100%;
-                padding: 1rem;
-                font-size: 1.1rem;
-                background-color: var(--primary-color);
-                color: white;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .submit-btn:hover {
-                background-color: #1ed760;
-            }
-
-            .error {
-                color: var(--error-color);
-                margin-top: 1rem;
-                font-size: 0.9rem;
-            }
-
-            .info {
-                color: var(--text-secondary-color);
-                margin-top: 1rem;
-                font-size: 0.9rem;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="login-container">
-            <h1>🔒 Enter PIN</h1>
-            <form method="post" action="/login">
-                <input type="password" name="pin" class="pin-input" placeholder="Enter PIN" maxlength="20" required autofocus>
-                <button type="submit" class="submit-btn">Access spotDL</button>
-            </form>
-            <div class="info">
-                Enter your PIN to access the spotDL downloader
-            </div>
-        </div>
-    </body>
-    </html>
-    """)
 
 @app.post("/login")
 async def login(request: Request, pin: str = Form(...)):
@@ -250,113 +153,9 @@ async def login(request: Request, pin: str = Form(...)):
     else:
         print(f"❌ Authentication failed: Invalid PIN")
         # Return login page with error
-        return HTMLResponse("""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PIN Authentication - spotDL</title>
-            <style>
-                :root {
-                    --primary-color: #1db954;
-                    --background-color: #121212;
-                    --surface-color: #1e1e1e;
-                    --text-color: #ffffff;
-                    --text-secondary-color: #b3b3b3;
-                    --error-color: #ff6b6b;
-                }
+        with open("frontend/login.html") as f:
+            return HTMLResponse(f.read())
 
-                body {
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                    background-color: var(--background-color);
-                    color: var(--text-color);
-                    margin: 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    min-height: 100vh;
-                    }
-
-                .login-container {
-                    background-color: var(--surface-color);
-                    padding: 2rem;
-                    border-radius: 16px;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-                    text-align: center;
-                    max-width: 400px;
-                    width: 90%;
-                }
-
-                h1 {
-                    margin-bottom: 2rem;
-                    color: var(--primary-color);
-                }
-
-                .pin-input {
-                    width: 100%;
-                    padding: 1rem;
-                    font-size: 1.2rem;
-                    border: 2px solid var(--error-color);
-                    border-radius: 8px;
-                    background-color: #2c2c2c;
-                    color: var(--text-color);
-                    text-align: center;
-                    letter-spacing: 0.5rem;
-                    margin-bottom: 1rem;
-                }
-
-                .pin-input:focus {
-                    outline: none;
-                    border-color: var(--primary-color);
-                }
-
-                .submit-btn {
-                    width: 100%;
-                    padding: 1rem;
-                    font-size: 1.1rem;
-                    background-color: var(--primary-color);
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    transition: background-color 0.3s;
-                }
-
-                .submit-btn:hover {
-                    background-color: #1ed760;
-                }
-
-                .error {
-                    color: var(--error-color);
-                    margin-top: 1rem;
-                    font-size: 0.9rem;
-                }
-
-                .info {
-                    color: var(--text-secondary-color);
-                    margin-top: 1rem;
-                    font-size: 0.9rem;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="login-container">
-                <h1>🔒 Enter PIN</h1>
-                <form method="post" action="/login">
-                    <input type="password" name="pin" class="pin-input" placeholder="Enter PIN" maxlength="20" required autofocus>
-                    <button type="submit" class="submit-btn">Access spotDL</button>
-                </form>
-                <div class="error">
-                    ❌ Invalid PIN. Please try again.
-                </div>
-                <div class="info">
-                    Enter your PIN to access the spotDL downloader
-                </div>
-            </div>
-        </body>
-        </html>
-        """, status_code=401)
 
 @app.get("/debug")
 async def debug_session(request: Request):

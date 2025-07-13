@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/style.css?v=1.2" />
+</head>
+<body class="body">
+    <div class="header">
+        <div class="title-card pixel-corners">
+            <a href="spotdl">
+                <img src="/static/spotify logo.png" alt="" class="spotify">
+            </a>
+            <p class="title">SpotDL - Improved</p>
+        </div>
+    </div>
+    <div class="login-wrapper">
+        <div class="login-container pixel-corners">
+            <form method="post" action="/login" class="form">
+                <div class="pixel-borders--wrapper">
+                    <input
+                    type="password"
+                    name="pin"
+                    class="pin-input"
+                    placeholder="X X X X"
+                    maxlength="20"
+                    required
+                    autofocus
+                    />
+                </div>
+                <button type="submit" class="submit-btn pixel-corners">Access spotDL</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
