@@ -1,0 +1,715 @@
+/* Center the login container */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+@font-face {
+    font-family: 'Juxel';
+    src: url('/static/juxel.ttf');
+  }
+  
+  :root {
+      --radi: 8px;
+      --text-color: black;
+      --card-color: #e6f8d9;
+      --backgrough-color: #009935;
+      --border-radi: 8px;
+  }
+  .title-card {
+      background-color: var(--card-color);
+      display: flex;
+  }
+  .spotify {
+      height:4em;
+      align-items: center;
+      padding: 0.6em;
+      margin-left: 0.4em;
+      margin-top: auto;
+      margin-bottom: auto;
+      filter: drop-shadow(0.4em 0.4em #0707072f);
+      transition: .2s;
+  }
+  
+  .spotify:hover {
+    filter: drop-shadow(0em 0em #0707072f);
+    transform: translateX(.4em) translateY(.4em);
+  }
+  
+  .title {
+      color: var(--text-color);
+      font-size: 3em;
+      margin-top: auto;
+      margin-bottom: auto;
+      text-align: left;
+      transform: translateY(0.05em);
+      margin-left: 0.3em;
+      margin-right: 0.3em;
+  }
+  
+  .login-container {
+      background-color: var(--card-color);
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 500px;
+  
+  }
+  
+  .form {
+      display: flex;
+      flex-direction: column;
+      font-family: "Juxel";
+  }
+  
+  .pin-input {
+      padding: 1rem;
+      font-family: "Juxel";
+      font-size: 1.2rem;
+      border: none;
+      text-align: center;
+      letter-spacing: 0.2rem;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+      transition: 1s;
+      display: block;
+      background-color: var(--card-color);
+      height: 4.5rem;
+  }
+  
+  .param-input {
+    padding: 1rem;
+    font-family: "Juxel";
+    border: none;
+    text-align: center;
+    letter-spacing: 0.2rem;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: 1s;
+    display: block;
+    background-color: var(--card-color);
+    height: 4.5rem;
+    font-size: small;
+  }
+
+  
+  .submit-btn {
+      margin-top: 40px;
+      height: 70px;
+      border: none;
+      background-color: var(--backgrough-color);
+      font-family: "juxel";
+      cursor: pointer;
+      font-size: 1.5em;
+      margin: none;
+      padding: none;
+      transition: .2s;
+  }
+  
+  .logout {    
+      border: none;
+      height: auto;
+      font-family: "juxel";
+      cursor: pointer;
+      font-size: 1.7em;
+      transition: 0.2s;
+      background-color: var(--card-color);
+      padding: 20px;
+      z-index: 10;
+      color: red;
+      margin-left: auto;
+  }
+  
+  .header {
+      display: flex;
+      margin: 20px;
+      margin-bottom: 0px;
+  }
+  
+  .content {
+      display: flex;
+      flex: 1;
+      background-color: transparent;
+      height: 100%;
+  }
+  
+  .inputs, .textarea {
+      flex: 1;
+      margin: 20px;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--card-color);
+      font-size: 1em;
+  }
+  
+.textarea {
+    margin-left: 10px;
+}
+
+.inputs {
+    margin-right: 10px;
+    padding: 20px;
+}
+
+
+.terminal {
+      resize: none;
+      border: none;
+      background-color: var(--card-color);
+      font-family: "Juxel";
+      height: 100%;
+      width: 100%;
+      font-size: 1em;
+  }
+
+.terminal-border {
+    height: 100%;
+    margin: .7em;
+    margin-top: 1.5em;
+}
+  
+  
+  .submit-btn:hover {
+    background-color: #1CD760;
+  }
+
+
+@font-face {
+    font-family: 'Juxel';
+    src: url('/juxel.ttf');
+  }
+  
+  :root {
+      --radi: 8px;
+      --text-color: black;
+      --card-color: #e6f8d9;
+      --backgrough-color: #009935;
+      --border-radi: 8px;
+  }
+  .title-card {
+      background-color: var(--card-color);
+      display: flex;
+  }
+  .spotify {
+      height:4em;
+      align-items: center;
+      padding: 0.6em;
+      margin-left: 0.4em;
+      margin-top: auto;
+      margin-bottom: auto;
+      filter: drop-shadow(0.4em 0.4em #0707072f);
+      transition: .2s;
+  }
+  
+  .spotify:hover {
+    filter: drop-shadow(0em 0em #0707072f);
+    transform: translateX(.4em) translateY(.4em);
+  }
+  
+  .title {
+      color: var(--text-color);
+      font-size: 3em;
+      margin-top: auto;
+      margin-bottom: auto;
+      text-align: left;
+      transform: translateY(0.05em);
+      margin-left: 0.3em;
+      margin-right: 0.3em;
+  }
+  
+  
+  .form {
+      display: flex;
+      flex-direction: column;
+      font-family: "Juxel";
+  }
+  
+  .pin-input {
+      padding: 1rem;
+      font-family: "Juxel";
+      font-size: 1.2rem;
+      border: none;
+      text-align: center;
+      letter-spacing: 0.2rem;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+      transition: 1s;
+      display: block;
+      background-color: var(--card-color);
+      height: 4.5rem;
+  }
+  
+  .param-input {
+    padding: 1rem;
+    font-family: "Juxel";
+    border: none;
+    text-align: center;
+    letter-spacing: 0.2rem;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: 1s;
+    display: block;
+    background-color: var(--card-color);
+    height: 4.5rem;
+    font-size: small;
+  }
+
+  
+  .submit-btn {
+      margin-top: 40px;
+      height: 70px;
+      border: none;
+      background-color: var(--backgrough-color);
+      font-family: "juxel";
+      cursor: pointer;
+      font-size: 1.5em;
+      margin: none;
+      padding: none;
+      transition: .2s;
+  }
+  
+  .logout {    
+      border: none;
+      height: auto;
+      font-family: "juxel";
+      cursor: pointer;
+      font-size: 1.7em;
+      transition: 0.2s;
+      background-color: var(--card-color);
+      padding: 20px;
+      z-index: 10;
+      color: red;
+      margin-left: auto;
+  }
+  
+  .header {
+      display: flex;
+      margin: 20px;
+      margin-bottom: 0px;
+  }
+  
+  .content {
+      display: flex;
+      flex: 1;
+      background-color: transparent;
+      height: 100%;
+  }
+  
+  .inputs, .textarea {
+      flex: 1;
+      margin: 20px;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--card-color);
+      font-size: 1em;
+  }
+  
+.textarea {
+    margin-left: 10px;
+}
+
+.inputs {
+    margin-right: 10px;
+    padding: 20px;
+}
+
+
+.terminal {
+      resize: none;
+      border: none;
+      background-color: var(--card-color);
+      font-family: "Juxel";
+      height: 100%;
+      width: 100%;
+      font-size: 1em;
+  }
+
+.terminal-border {
+    height: 100%;
+    margin: .7em;
+    margin-top: 1.5em;
+}
+  
+  
+  .submit-btn:hover {
+    background-color: #1CD760;
+  }
+
+/* Progress bar styling */
+progress {
+    width: 100%;
+    height:50px;
+    background-color: var(--card-color);
+    border: none;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-text {
+    display: relative;
+}
+
+progress::-webkit-progress-bar {
+    background-color: var(--card-color);
+}
+
+progress::-webkit-progress-value {
+    background-color: #1CD760;
+}
+
+progress::-moz-progress-bar {
+    background-color: #1CD760;
+}
+
+  
+  
+  body {
+      margin: 0;
+      font-family: "Juxel";
+      background-color: var(--backgrough-color);
+      background-image:
+          linear-gradient(rgba(117, 188, 142) 3px, transparent 1px),
+          linear-gradient(90deg, rgba(117, 188, 142) 3px, transparent 1px);
+      background-position: 2em;
+      background-size: 90px 90px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+  }
+  
+  html {
+      height: 100%;
+      margin: 0;
+  }
+  
+  .pixel-corners {
+      clip-path: polygon(
+          0px calc(100% - calc(var(--radi) * 2)),
+          var(--radi) calc(100% - calc(var(--radi) * 2)),
+          var(--radi) calc(100% - var(--radi)),
+          calc(var(--radi) * 2) calc(100% - var(--radi)),
+          calc(var(--radi) * 2) 100%,
+          calc(100% - calc(var(--radi) * 2)) 100%,
+          calc(100% - calc(var(--radi) * 2)) calc(100% - var(--radi)),
+          calc(100% - var(--radi)) calc(100% - var(--radi)),
+          calc(100% - var(--radi)) calc(100% - calc(var(--radi) * 2)),
+          100% calc(100% - calc(var(--radi) * 2)),
+          100% calc(var(--radi) * 2),
+          calc(100% - var(--radi)) calc(var(--radi) * 2),
+          calc(100% - var(--radi)) var(--radi),
+          calc(100% - calc(var(--radi) * 2)) var(--radi),
+          calc(100% - calc(var(--radi) * 2)) 0px,
+          calc(var(--radi) * 2) 0px,
+          calc(var(--radi) * 2) var(--radi),
+          var(--radi) var(--radi),
+          var(--radi) calc(var(--radi) * 2),
+          0px calc(var(--radi) * 2)
+      );
+  }
+  
+  .pixel-borders,
+  .pixel-borders--wrapper {
+      clip-path: polygon(
+          0px calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) 100%,
+          calc(100% - calc(var(--border-radi) * 2)) 100%,
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - var(--border-radi)),
+          calc(100% - var(--border-radi)) calc(100% - var(--border-radi)),
+          calc(100% - var(--border-radi))
+              calc(100% - calc(var(--border-radi) * 2)),
+          100% calc(100% - calc(var(--border-radi) * 2)),
+          100% calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) 0px,
+          calc(var(--border-radi) * 2) 0px,
+          calc(var(--border-radi) * 2) var(--border-radi),
+          var(--border-radi) var(--border-radi),
+          var(--border-radi) calc(var(--border-radi) * 2),
+          0px calc(var(--border-radi) * 2)
+      );
+      position: relative;
+  }
+  .pixel-borders {
+      border: var(--border-radi) solid transparent;
+  }
+  .pixel-borders--wrapper {
+      width: 100%;
+      height: fit-content;
+  }
+  .pixel-borders--wrapper .pixel-borders {
+      display: block;
+      clip-path: polygon(
+          var(--border-radi) calc(var(--border-radi) * 2),
+          calc(var(--border-radi) * 2) calc(var(--border-radi) * 2),
+          calc(var(--border-radi) * 2) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi))
+              calc(100% - calc(var(--border-radi) * 2)),
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - calc(var(--border-radi) * 2)),
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - calc(var(--border-radi) * 2))
+      );
+  }
+  .pixel-borders::after,
+  .pixel-borders--wrapper::after {
+      content: "";
+      position: absolute;
+      clip-path: polygon(
+          0px calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) 100%,
+          calc(100% - calc(var(--border-radi) * 2)) 100%,
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - var(--border-radi)),
+          calc(100% - var(--border-radi)) calc(100% - var(--border-radi)),
+          calc(100% - var(--border-radi))
+              calc(100% - calc(var(--border-radi) * 2)),
+          100% calc(100% - calc(var(--border-radi) * 2)),
+          100% calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) 0px,
+          calc(var(--border-radi) * 2) 0px,
+          calc(var(--border-radi) * 2) var(--border-radi),
+          var(--border-radi) var(--border-radi),
+          var(--border-radi) calc(var(--border-radi) * 2),
+          0px calc(var(--border-radi) * 2),
+          0px 50%,
+          var(--border-radi) 50%,
+          var(--border-radi) calc(var(--border-radi) * 2),
+          calc(var(--border-radi) * 2) calc(var(--border-radi) * 2),
+          calc(var(--border-radi) * 2) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi))
+              calc(100% - calc(var(--border-radi) * 2)),
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - calc(var(--border-radi) * 2)),
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) 50%,
+          0px 50%
+      );
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--backgrough-color);
+      display: block;
+      pointer-events: none;
+  }
+  .pixel-borders::after {
+      margin: calc(-1 * (var(--border-radi)));
+  }
+  
+  
+  @media screen and (max-width: 800px) {
+  }
+/* Center progress text over progress bar */
+#progress-container {
+    position: relative;
+}
+
+#progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    font-family: "Juxel";
+    pointer-events: none;
+}
+
+#progress-bar {
+    position: relative;
+    z-index: 0;
+}
+
+
+  
+  
+  body {
+      margin: 0;
+      font-family: "Juxel";
+      background-color: var(--backgrough-color);
+      background-image:
+          linear-gradient(rgba(117, 188, 142) 3px, transparent 1px),
+          linear-gradient(90deg, rgba(117, 188, 142) 3px, transparent 1px);
+      background-position: 2em;
+      background-size: 90px 90px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+  }
+  
+  html {
+      height: 100%;
+      margin: 0;
+  }
+  
+  .pixel-corners {
+      clip-path: polygon(
+          0px calc(100% - calc(var(--radi) * 2)),
+          var(--radi) calc(100% - calc(var(--radi) * 2)),
+          var(--radi) calc(100% - var(--radi)),
+          calc(var(--radi) * 2) calc(100% - var(--radi)),
+          calc(var(--radi) * 2) 100%,
+          calc(100% - calc(var(--radi) * 2)) 100%,
+          calc(100% - calc(var(--radi) * 2)) calc(100% - var(--radi)),
+          calc(100% - var(--radi)) calc(100% - var(--radi)),
+          calc(100% - var(--radi)) calc(100% - calc(var(--radi) * 2)),
+          100% calc(100% - calc(var(--radi) * 2)),
+          100% calc(var(--radi) * 2),
+          calc(100% - var(--radi)) calc(var(--radi) * 2),
+          calc(100% - var(--radi)) var(--radi),
+          calc(100% - calc(var(--radi) * 2)) var(--radi),
+          calc(100% - calc(var(--radi) * 2)) 0px,
+          calc(var(--radi) * 2) 0px,
+          calc(var(--radi) * 2) var(--radi),
+          var(--radi) var(--radi),
+          var(--radi) calc(var(--radi) * 2),
+          0px calc(var(--radi) * 2)
+      );
+  }
+  
+  .pixel-borders,
+  .pixel-borders--wrapper {
+      clip-path: polygon(
+          0px calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) 100%,
+          calc(100% - calc(var(--border-radi) * 2)) 100%,
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - var(--border-radi)),
+          calc(100% - var(--border-radi)) calc(100% - var(--border-radi)),
+          calc(100% - var(--border-radi))
+              calc(100% - calc(var(--border-radi) * 2)),
+          100% calc(100% - calc(var(--border-radi) * 2)),
+          100% calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) 0px,
+          calc(var(--border-radi) * 2) 0px,
+          calc(var(--border-radi) * 2) var(--border-radi),
+          var(--border-radi) var(--border-radi),
+          var(--border-radi) calc(var(--border-radi) * 2),
+          0px calc(var(--border-radi) * 2)
+      );
+      position: relative;
+  }
+  .pixel-borders {
+      border: var(--border-radi) solid transparent;
+  }
+  .pixel-borders--wrapper {
+      width: 100%;
+      height: fit-content;
+  }
+  .pixel-borders--wrapper .pixel-borders {
+      display: block;
+      clip-path: polygon(
+          var(--border-radi) calc(var(--border-radi) * 2),
+          calc(var(--border-radi) * 2) calc(var(--border-radi) * 2),
+          calc(var(--border-radi) * 2) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi))
+              calc(100% - calc(var(--border-radi) * 2)),
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - calc(var(--border-radi) * 2)),
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - calc(var(--border-radi) * 2))
+      );
+  }
+  .pixel-borders::after,
+  .pixel-borders--wrapper::after {
+      content: "";
+      position: absolute;
+      clip-path: polygon(
+          0px calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) 100%,
+          calc(100% - calc(var(--border-radi) * 2)) 100%,
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - var(--border-radi)),
+          calc(100% - var(--border-radi)) calc(100% - var(--border-radi)),
+          calc(100% - var(--border-radi))
+              calc(100% - calc(var(--border-radi) * 2)),
+          100% calc(100% - calc(var(--border-radi) * 2)),
+          100% calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) 0px,
+          calc(var(--border-radi) * 2) 0px,
+          calc(var(--border-radi) * 2) var(--border-radi),
+          var(--border-radi) var(--border-radi),
+          var(--border-radi) calc(var(--border-radi) * 2),
+          0px calc(var(--border-radi) * 2),
+          0px 50%,
+          var(--border-radi) 50%,
+          var(--border-radi) calc(var(--border-radi) * 2),
+          calc(var(--border-radi) * 2) calc(var(--border-radi) * 2),
+          calc(var(--border-radi) * 2) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) var(--border-radi),
+          calc(100% - calc(var(--border-radi) * 2)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi)) calc(var(--border-radi) * 2),
+          calc(100% - var(--border-radi))
+              calc(100% - calc(var(--border-radi) * 2)),
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - calc(var(--border-radi) * 2)),
+          calc(100% - calc(var(--border-radi) * 2))
+              calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - var(--border-radi)),
+          calc(var(--border-radi) * 2) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) calc(100% - calc(var(--border-radi) * 2)),
+          var(--border-radi) 50%,
+          0px 50%
+      );
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--backgrough-color);
+      display: block;
+      pointer-events: none;
+  }
+  .pixel-borders::after {
+      margin: calc(-1 * (var(--border-radi)));
+  }
+  
+  
+  @media screen and (max-width: 800px) {
+  }

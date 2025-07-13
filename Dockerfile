@@ -35,5 +35,5 @@ EXPOSE 8000
 # Test imports before running
 RUN python test_import.py
 
-# Run the server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the server using the startup script
+CMD ["python", "run.py"]
