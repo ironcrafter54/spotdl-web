@@ -162,8 +162,10 @@
 
             function connect() {
                 try {
+                    // Determine WebSocket protocol based on current page protocol
+                    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
                     // Include session token in WebSocket connection
-                    const wsUrl = `ws://${window.location.host}/ws?session_token=${sessionToken}`;
+                    const wsUrl = `${wsProtocol}//${window.location.host}/ws?session_token=${sessionToken}`;
                     socket = new WebSocket(wsUrl);
 
                     socket.onopen = () => {
@@ -198,7 +200,8 @@
 
                     socket.onerror = (err) => {
                         console.error("WebSocket error:", err);
-                        appendLog("Connection error.");
+                        appendLog("Connection error. This may be due to Cloudflare tunnel configuration.");
+                        appendLog("Please ensure WebSocket support is enabled in your tunnel config.");
                     };
 
                     socket.onclose = (event) => {
@@ -213,7 +216,13 @@
                             return;
                         }
 
-                        appendLog("Connection lost. Reconnecting...");
+                        // Special handling for Cloudflare tunnel issues
+                        if (event.code === 1006) {
+                            appendLog("Connection lost. This may be due to Cloudflare tunnel WebSocket configuration.");
+                            appendLog("Please check your tunnel config includes WebSocket support.");
+                        } else {
+                            appendLog("Connection lost. Reconnecting...");
+                        }
 
                         if (reconnectAttempts < maxReconnectAttempts) {
                             reconnectAttempts++;

@@ -144,7 +144,7 @@ async def login(request: Request, pin: str = Form(...)):
             value=session_token,
             max_age=3600 * 24,  # 24 hours
             httponly=False,  # Set to False for debugging - can see in browser dev tools
-            secure=False,  # Must be False for HTTP
+            secure=False,  # Keep False for compatibility with both HTTP and HTTPS
             samesite="lax",
             path="/"  # Ensure cookie is available for all paths
         )

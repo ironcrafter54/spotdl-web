@@ -11,6 +11,7 @@ async def add_to_playlist(name, songs, manager):
     time.sleep(5)
     await manager.broadcast("Scan Completed")
     print("started Scan")
+
     def get_playlist_id(name):
         print("getting Playlist name")
         playlist_exists = False
@@ -34,8 +35,11 @@ async def add_to_playlist(name, songs, manager):
         print("grabbing song id's")
         song_ids = []
         for i in titles:
+            print(i)
             search_item = i.replace(" - "," ")
+            print("search_item:", search_item)
             result = conn.search2(query=search_item,artistCount=0,albumCount=0,songCount=1)
+            print(result)
             if "song" in result["searchResult2"]:
                 song_ids.append(result["searchResult2"]["song"][0]["id"])
             else:
