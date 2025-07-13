@@ -5,7 +5,7 @@ import time
 from config import settings
 
 async def add_to_playlist(name, songs, manager):
-    conn = libsonic.Connection(settings.URL, settings.USERNAME, settings.PASSWORD, settings.NAVIDROME_PORT)
+    conn = libsonic.Connection(settings.URL, settings.NAVIDROME_USERNAME, settings.PASSWORD, settings.NAVIDROME_PORT)
     await manager.broadcast("Scanning Library for new songs")
     conn.startScan()
     time.sleep(5)

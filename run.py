@@ -22,6 +22,10 @@ if __name__ == "__main__":
 
     if settings.SESSION_SECRET == "your-secret-key-change-this":
         print("⚠️  WARNING: Using default session secret! Change with: export SESSION_SECRET='your-secret'")
+    print(settings.NAVIDROME_PORT)
+    print(settings.NAVIDROME_USERNAME)
+    print(settings.PASSWORD)
+    print(settings.URL)
 
     print()
     print(f"🚀 Access your app at: http://localhost:8000")
@@ -34,9 +38,8 @@ if __name__ == "__main__":
         uvicorn.run(
             "main:app",
             host="0.0.0.0",
-            port="8000",
+            port=8000,
             reload=False,
-            log_level="info"
         )
     except Exception as e:
         print(f"❌ Failed to start server: {e}")

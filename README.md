@@ -70,10 +70,10 @@ export NAVIDROME_PORT="8000"                              # Port for accesing na
 For Navidrome playlist integration, set these environment variables:
 
 ```bash
-export SECRET_KEY=your-navidrome-url
-export USERNAME=your-navidrome-username
-export PASSWORD=your-navidrome-password
-export PORT=4533  # Navidrome port
+export URL=http://192.168.1.250
+export NAVIDROME_USERNAME=admin
+export PASSWORD=password
+export NAVIDROME_PORT=4533  # Navidrome port
 ```
 
 ### Docker Environment Variables

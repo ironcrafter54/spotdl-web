@@ -1,8 +1,8 @@
 import os
 
 class Settings:
-    URL = os.getenv("SECRET_KEY", "default")
-    USERNAME = os.getenv("USERNAME", "default")
+    URL = os.getenv("URL", "default")
+    NAVIDROME_USERNAME = os.getenv("NAVIDROME_USERNAME", "default")
     PASSWORD = os.getenv("PASSWORD", "passwords")
     NAVIDROME_PORT = os.getenv("NAVIDROME_PORT", "8000")
     PIN = os.getenv("PIN", "1234")  # Default PIN, should be changed via environment variable
