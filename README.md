@@ -61,19 +61,19 @@ The application supports the following environment variables:
 
 #### Core Settings
 ```bash
-export PIN="your-secret-pin"                    # PIN for accessing the application (default: 1234)
+export PIN=1234                                 # PIN for accessing the application (default: 1234) (do)
 export SESSION_SECRET="your-session-secret"     # Secret key for session management
-export PORT="8000"                              # Port for the web application
+export NAVIDROME_PORT="8000"                              # Port for accesing navidrom for playlist integration
 ```
 
 #### Navidrome Integration
 For Navidrome playlist integration, set these environment variables:
 
 ```bash
-export SECRET_KEY="your-navidrome-url"
-export USERNAME="your-navidrome-username"
-export PASSWORD="your-navidrome-password"
-export PORT="4533"  # Navidrome port
+export SECRET_KEY=your-navidrome-url
+export USERNAME=your-navidrome-username
+export PASSWORD=your-navidrome-password
+export PORT=4533  # Navidrome port
 ```
 
 ### Docker Environment Variables
@@ -131,11 +131,6 @@ echo "SESSION_SECRET=your-random-secret-key" >> .env
    - Enter a Spotify URL (playlist, album, or track)
    - Click "Download" to start the process
 
-3. **Download with Playlist Integration**:
-   - Format your input as: `spotify-url---playlist-name`
-   - Example: `https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M---My Playlist`
-   - The app will download songs and automatically add them to the specified Navidrome playlist
-
 4. **Monitor Progress**:
    - Real-time progress updates show current download status
    - View logs for detailed information about each song
@@ -149,14 +144,6 @@ echo "SESSION_SECRET=your-random-secret-key" >> .env
 - SoundCloud tracks and playlists
 - Bandcamp albums and tracks
 - And more (see [spotDL documentation](https://spotdl.readthedocs.io/en/latest/))
-
-## API Endpoints
-
-- `GET /` - Web interface (requires authentication)
-- `GET /login` - PIN authentication page
-- `POST /login` - PIN authentication endpoint
-- `POST /logout` - Logout endpoint
-- `WebSocket /ws` - Real-time communication for downloads and progress updates (requires authentication)
 
 ## Project Structure
 
@@ -172,14 +159,6 @@ spotdl-web/
 ├── frontend/
 │   └── index.html     # Web interface with authentication
 └── downloads/         # Downloaded music files
-```
-
-## Development
-
-### Running Tests
-
-```bash
-python test_import.py
 ```
 
 ### Local Development
