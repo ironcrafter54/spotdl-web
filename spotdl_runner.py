@@ -35,6 +35,14 @@ async def run_spotdl(url: str, manager, state):
             decoded_chunk = chunk.decode('utf-8', errors='ignore')
             stripped_chunk = decoded_chunk.strip()
 
+            # Filter out INFO messages from spotdl
+            if stripped_chunk.startswith("INFO:spotdl."):
+                continue
+            
+            # Filter out other logging messages
+            if stripped_chunk.startswith("DEBUG:") or stripped_chunk.startswith("WARNING:") or stripped_chunk.startswith("ERROR:"):
+                continue
+
             # print("stripped chunk is:",stripped_chunk,"end of stripped chunk")
 
             if stripped_chunk == "":
