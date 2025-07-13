@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     # Configuration display
     print(f"📌 PIN Authentication: {'Enabled' if settings.PIN != '1234' else 'Using Default PIN (Change recommended!)'}")
-    print(f"🌐 Server will run on port: {settings.PORT}")
+    print(f"🌐 Server will run on port: 8000")
     print(f"🔐 Session secret configured: {'Yes' if settings.SESSION_SECRET != 'your-secret-key-change-this' else 'Using default (Change recommended!)'}")
 
     # Security warnings
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         print("⚠️  WARNING: Using default session secret! Change with: export SESSION_SECRET='your-secret'")
 
     print()
-    print(f"🚀 Access your app at: http://localhost:{settings.PORT}")
+    print(f"🚀 Access your app at: http://localhost:8000")
     print("🔑 Login with your PIN to start downloading music")
     print("=" * 50)
     print()
@@ -41,6 +41,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"❌ Failed to start server: {e}")
         print("💡 Try:")
-        print(f"   1. Check if port {settings.PORT} is available")
+        print(f"   1. Check if port 8000 is available")
         print("   2. Install dependencies: pip install -r requirements.txt")
         print("   3. Try a different port: export PORT='8080'")
