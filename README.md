@@ -1,5 +1,5 @@
 # spotDL Web
-(this readme was made by claude take it with a grain of salt,)
+(This readme was made by claude, so take it with a grain of salt,)
 A web-based interface for [spotDL](https://github.com/spotDL/spotify-downloader) that allows you to download music from Spotify, YouTube, and other platforms through a clean, real-time web interface. The application also supports automatic playlist integration with Navidrome media servers.
 
 ## Features
