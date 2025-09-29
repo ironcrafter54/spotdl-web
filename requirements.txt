@@ -2,8 +2,6 @@ fastapi
 uvicorn
 websockets
 aiofiles
-yt-dlp
-ffmpeg
 spotdl
 pytest
 py-sonic

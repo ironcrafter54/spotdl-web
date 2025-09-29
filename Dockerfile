@@ -10,6 +10,7 @@ RUN apt-get update && \
     apt-get install -y ffmpeg git curl && \
     apt-get clean
 
+RUN pip install yt-dlp
 # Install spotDL via pip
 RUN pip install --no-cache-dir spotdl fastapi uvicorn[standard]
 
