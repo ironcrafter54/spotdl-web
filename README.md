@@ -25,7 +25,7 @@ A web-based interface for [spotDL](https://github.com/spotDL/spotify-downloader)
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/ironcrafter54/spotdl-web
 cd spotdl-web
 ```
 
@@ -39,7 +39,7 @@ docker run -p 8000:8000 -v ./downloads:/app/downloads spotdl-web
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/ironcrafter54/spotdl-web
 cd spotdl-web
 ```
 
