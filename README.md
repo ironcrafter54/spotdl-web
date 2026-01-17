@@ -197,22 +197,6 @@ python run.py
 - Regularly rotate your PIN and session secret
 - Monitor access logs for suspicious activity
 
-### Logs
-
-Check the console output for detailed error messages and download progress. The web interface also displays real-time logs.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This project is open source. Please check the license file for details.
-
 ## Acknowledgments
 
 - [spotDL](https://github.com/spotDL/spotify-downloader) - The core music downloading library
