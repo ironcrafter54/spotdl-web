@@ -191,7 +191,7 @@ async def download_task(url: str):
             await manager.broadcast(message)
         # await manager.broadcast("Starting download...")
         songs_to_add = []
-        songs_to_add = await run_spotdl(parts[0], manager, state)
+        songs_to_add = await run_spotdl(parts[0], manager, state, settings.CLIENT_ID, settings.CLIENT_SECRET)
         print("songs to add",songs_to_add)
 
         if parts[1] != "":

@@ -2,12 +2,12 @@
 import asyncio
 import re
 
-async def run_spotdl(url: str, manager, state):
+async def run_spotdl(url: str, manager, state, id, secret):
 
     try:
         # Run spotdl with verbose output
         process = await asyncio.create_subprocess_exec(
-            'spotdl', 'download', url, '--format', 'mp3', '--bitrate', '320k', '--output', './downloads',
+            'spotdl', '--client-id', id, '--client-secret', secret, '--no-cache', '--format', 'mp3', '--bitrate', '320k', url, '--output', './downloads',
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.STDOUT
         )
